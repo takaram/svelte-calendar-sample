@@ -61,3 +61,11 @@ button:not(:disabled):active {
 button:focus {
 	border-color: #666;
 }
+
+.week-header > :nth-child(1),.week > :nth-child(1) {
+	color: #f53737;
+}
+
+.week-header > :nth-child(7),.week > :nth-child(7) {
+	color: #3857e4;
+}

@@ -18,7 +18,7 @@
   }
 </style>
 
-<div>
+<div class="week">
   {#each week as date}
     <Day {date} />
   {/each}
