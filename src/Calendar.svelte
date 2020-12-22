@@ -1,26 +1,47 @@
 <script lang="ts">
   import Week from "./Week.svelte";
 
-  const today = new Date();
+  let currentDay: Date;
+  let sundays: Date[];
 
-  // 今月1日
-  const firstDayOfMonth = new Date(today);
-  firstDayOfMonth.setDate(1);
+  const setCurrentDay = (currentDay_: Date) => {
+    currentDay = currentDay_;
 
-  // 1日が属する週の日曜日
-  const firstDayOfFirstWeek = new Date(firstDayOfMonth);
-  firstDayOfFirstWeek.setDate(1 - firstDayOfMonth.getDay());
+    // 今月1日
+    const firstDayOfMonth = new Date(currentDay);
+    firstDayOfMonth.setDate(1);
 
-  // 表示するすべての日曜日
-  const sundays = Array.from(Array(6).keys(), (i) => {
-    const sunday = new Date(firstDayOfFirstWeek);
-    sunday.setDate(sunday.getDate() + 7 * i);
-    return sunday;
-  }).filter((date, i) => i === 0 || date.getMonth() === today.getMonth());
+    // 1日が属する週の日曜日
+    const firstDayOfFirstWeek = new Date(firstDayOfMonth);
+    firstDayOfFirstWeek.setDate(1 - firstDayOfMonth.getDay());
+
+    // 表示するすべての日曜日
+    sundays = Array.from(Array(6).keys(), (i) => {
+      const sunday = new Date(firstDayOfFirstWeek);
+      sunday.setDate(sunday.getDate() + 7 * i);
+      return sunday;
+    }).filter(
+      (date, i) => i === 0 || date.getMonth() === currentDay.getMonth()
+    );
+  };
+
+  setCurrentDay(new Date());
+
+  const goToPrevMonth = () => {
+    currentDay.setMonth(currentDay.getMonth() - 1);
+    setCurrentDay(currentDay);
+  };
+
+  const goToNextMonth = () => {
+    currentDay.setMonth(currentDay.getMonth() + 1);
+    setCurrentDay(currentDay);
+  };
 </script>
 
 <style>
   h1 {
+    display: inline-block;
+    min-width: 13rem;
     margin: 0;
   }
 
@@ -49,10 +70,27 @@
     flex-direction: column;
     flex: 1;
   }
+
+  .month-control {
+    display: inline-block;
+    color: #666;
+    font-size: 1.8rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 0.9;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .month-control:hover {
+    background-color: #e6e6e6;
+  }
 </style>
 
 <div>
-  <h1>{today.getFullYear()}年{today.getMonth() + 1}月</h1>
+  <span class="month-control" role="button" on:click="{goToPrevMonth}">&lt;</span>
+  <h1>{currentDay.getFullYear()}年{currentDay.getMonth() + 1}月</h1>
+  <span class="month-control" role="button" on:click="{goToNextMonth}">&gt;</span>
 </div>
 <div class="calendar">
   <div class="week-header">

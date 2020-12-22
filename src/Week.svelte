@@ -4,7 +4,7 @@
   export let startDate: Date;
 
   // 1週間のDateオブジェクト
-  const week = Array.from(Array(7).keys(), (i) => {
+  $: week = Array.from(Array(7).keys(), (i) => {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     return date;
